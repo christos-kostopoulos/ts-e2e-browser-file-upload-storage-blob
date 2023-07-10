@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { useLoaderData, useOutlet, Await } from "react-router-dom";
-import { AuthProvider } from "../hooks/useAuth";
 
 export const AuthLayout = () => {
     const outlet = useOutlet();
@@ -12,9 +11,7 @@ export const AuthLayout = () => {
             <Await
                 resolve={userPromise}
                 errorElement={<Alert severity="error">Something went wrong!</Alert>}
-                children={(user) => (
-                    <AuthProvider userData={user}>{outlet}</AuthProvider>
-                )}
+                children={outlet}
             />
         </Suspense>
     );

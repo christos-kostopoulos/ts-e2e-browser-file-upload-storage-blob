@@ -1,35 +1,41 @@
-import { createContext, useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "./useLocalStorage";
+import { Auth, onAuthStateChanged, User } from 'firebase/auth';
+import { useEffect } from 'react';
+import { LoadingHook, useLoadingValue } from '../util';
 
-const AuthContext = createContext({});
 
-export const AuthProvider = ({ children, userData }: any) => {
-  const [user, setUser] = useLocalStorage("user", userData);
-  const navigate = useNavigate();
+export type AuthStateHook = LoadingHook<User | null, Error>;
 
-  const login = async (data: any) => {
-    setUser(data);
-    navigate("/dashboard/profile", { replace: true });
-  };
-
-  const logout = () => {
-    setUser(null);
-    navigate("/", { replace: true });
-  };
-
-  const value = useMemo(
-    () => ({
-      user,
-      login,
-      logout
-    }),
-    [user]
-  );
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+type AuthStateOptions = {
+  onUserChanged?: (user: User | null) => Promise<void>;
 };
 
-export const useAuth: any = () => {
-  return useContext(AuthContext);
+export default (auth: Auth, options?: AuthStateOptions): AuthStateHook => {
+  const { error, loading, setError, setValue, value } = useLoadingValue<
+    User | null,
+    Error
+  >(() => auth.currentUser);
+
+  useEffect(() => {
+    const listener = onAuthStateChanged(
+      auth,
+      async (user) => {
+        if (options?.onUserChanged) {
+          // onUserChanged function to process custom claims on any other trigger function
+          try {
+            await options.onUserChanged(user);
+          } catch (e) {
+            setError(e as Error);
+          }
+        }
+        setValue(user);
+      },
+      setError
+    );
+
+    return () => {
+      listener();
+    };
+  }, [auth]);
+
+  return [value, loading, error];
 };

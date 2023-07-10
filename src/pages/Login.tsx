@@ -1,35 +1,35 @@
 // Login form with email and password
-import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Login = () => {
-    const { login } = useAuth();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [user, loading, error] = useAuthState(auth);
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log(userCredential);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        signInWithEmailAndPassword(auth, email, password);
         // login({
         //     email: email,
         //     password: password
         // });
     };
 
+    useEffect(() => {
+        signOut(auth);
+    }, []);
+
+    console.log(loading, user);
     return (
         <div className="dark-background">
             <div className="login-form-container">
                 <div className="form-container" id="login-form">
                     <h1>Seaquest</h1>
-                    <form onSubmit={handleSubmit}>
+                    {loading ? <p>Loading...</p> : <form onSubmit={handleSubmit}>
 
                         <label>Email:</label>
                         <input
@@ -49,7 +49,7 @@ const Login = () => {
                         />
 
                         <button type="submit">Login</button>
-                    </form>
+                    </form>}
                 </div >
             </div>
         </div>
