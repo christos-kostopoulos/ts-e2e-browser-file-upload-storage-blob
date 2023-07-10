@@ -3,27 +3,23 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import useSignInWithEmailAndPassword from "../hooks/useSignInWithEmailAndPassword";
 
 const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, loading, error] = useAuthState(auth);
-
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useSignInWithEmailAndPassword(auth);
     const handleSubmit = (event: any) => {
-        event.preventDefault();
-        signInWithEmailAndPassword(auth, email, password);
-        // login({
-        //     email: email,
-        //     password: password
-        // });
-    };
+       signInWithEmailAndPassword(email, password);
+    }
 
-    useEffect(() => {
-        signOut(auth);
-    }, []);
-
-    console.log(loading, user);
+ 
     return (
         <div className="dark-background">
             <div className="login-form-container">
@@ -49,6 +45,7 @@ const Login = () => {
                         />
 
                         <button type="submit">Login</button>
+                        {error && <p>{error.message}</p>}
                     </form>}
                 </div >
             </div>

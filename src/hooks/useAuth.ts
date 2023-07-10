@@ -24,6 +24,7 @@ export default (auth: Auth, options?: AuthStateOptions): AuthStateHook => {
           try {
             await options.onUserChanged(user);
           } catch (e) {
+            console.log("Errooooooor") 
             setError(e as Error);
           }
         }
