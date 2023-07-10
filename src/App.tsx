@@ -1,76 +1,52 @@
-// ./src/App.tsx
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  defer
+} from "react-router-dom";
 
-import React, { useState, useEffect } from 'react';
-import uploadFileToBlob, { isStorageConfigured, getBlobsInContainer } from './azure-storage-blob';
-import DisplayImagesFromContainer from './ContainerImages';
-const storageConfigured = isStorageConfigured();
+import "./index.css";
 
-const App = (): JSX.Element => {
-  // all blobs in container
-  const [blobList, setBlobList] = useState<string[]>([]);
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import { ProtectedLayout } from "./pages/ProtectedLayout";
+import { AuthLayout } from "./components/AuthLayout";
+import { HomeLayout } from "./components/HomeLayout";
+import Settings from "./pages/Settings";
 
-  // current file to upload into container
-  const [fileSelected, setFileSelected] = useState<File | null>();
-  const [fileUploaded, setFileUploaded] = useState<string>('');
+// ideally this would be an API call to server to get logged in user data
 
-  // UI/form management
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [inputKey, setInputKey] = useState(Math.random().toString(36));
-
-  // *** GET FILES IN CONTAINER ***
-  useEffect(() => {
-    getBlobsInContainer().then((list:any) =>{
-      // prepare UI for results
-      setBlobList(list);
-    })
-  }, [fileUploaded]);
-
-  const onFileChange = (event: any) => {
-    // capture file into state
-    setFileSelected(event.target.files[0]);
-  };
-
-  const onFileUpload = async () => {
-
-    if(fileSelected && fileSelected?.name){
-    // prepare UI
-    setUploading(true);
-
-    // *** UPLOAD TO AZURE STORAGE ***
-    await uploadFileToBlob(fileSelected);
-
-    // reset state/form
-    setFileSelected(null);
-    setFileUploaded(fileSelected.name);
-    setUploading(false);
-    setInputKey(Math.random().toString(36));
-
-    }
-
-  };
-
-  // display form
-  const DisplayForm = () => (
-    <div>
-      <input type="file" onChange={onFileChange} key={inputKey || ''} />
-      <button type="submit" onClick={onFileUpload}>
-        Upload!
-          </button>
-    </div>
-  )
-
-  return (
-    <div>
-      <h1>Upload file to Azure Blob Storage</h1>
-      {storageConfigured && !uploading && DisplayForm()}
-      {storageConfigured && uploading && <div>Uploading</div>}
-      <hr />
-      {storageConfigured && blobList.length > 0 && <DisplayImagesFromContainer blobList={blobList}/>}
-      {!storageConfigured && <div>Storage is not configured.</div>}
-    </div>
+const getUserData = () =>
+  new Promise((resolve) =>
+    setTimeout(() => {
+      const user = window.localStorage.getItem("user");
+      resolve(user);
+    }, 3000)
   );
-};
 
-export default App;
+// for error
+// const getUserData = () =>
+//   new Promise((resolve, reject) =>
+//     setTimeout(() => {
+//       reject("Error");
+//     }, 3000)
+//   );
 
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      element={<AuthLayout />}
+      loader={() => defer({ userPromise: getUserData() })}
+    >
+      <Route element={<HomeLayout />}>
+        <Route path="/" element={<Login />} />
+      </Route>
 
+      <Route path="/dashboard" element={<ProtectedLayout />}>
+        <Route path="profile" element={<Profile />} />
+        <Route path="settings" element={<Settings />} />
+      </Route>
+    </Route>
+  )
+);
