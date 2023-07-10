@@ -1,7 +1,8 @@
 // Login form with email and password
-import { signinWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { auth } from '../firebase';
 
 const Login = () => {
     const { login } = useAuth();
@@ -10,12 +11,17 @@ const Login = () => {
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        // signinWithEmailAndPassword(login, email, password)
-     
-        login({
-            email: email,
-            password: password
-        });
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                console.log(userCredential);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        // login({
+        //     email: email,
+        //     password: password
+        // });
     };
 
     return (
