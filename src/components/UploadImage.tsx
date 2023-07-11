@@ -1,10 +1,10 @@
 // ./src/App.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
 import uploadFileToBlob, { isStorageConfigured, getBlobsInContainer } from '../azure-storage-blob';
 import DisplayImagesFromContainer from '../ContainerImages';
 import createRecord from '../air-table';
+import UploadImageForm from './UploadImageForm';
 
 const storageConfigured = isStorageConfigured();
 
@@ -13,7 +13,7 @@ const UploadImage = (): JSX.Element => {
   const [blobList, setBlobList] = useState<string[]>([]);
 
   // current file to upload into container
-  const [fileSelected, setFileSelected] = useState<File | null>();
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileUploaded, setFileUploaded] = useState<string>('');
   const [comment, setComment] = useState<string>('');
   // UI/form management
@@ -29,45 +29,56 @@ const UploadImage = (): JSX.Element => {
   }, [fileUploaded]);
 
   const onFileChange = (event: any) => {
-    // capture file into state
-    setFileSelected(event.target.files[0]);
+    const files: any = Array.from(event.target.files);
+    setSelectedFiles(files);
   };
 
+  const removeImage = (index: number) => {
+    const newSelectedFiles = [...selectedFiles];
+    newSelectedFiles.splice(index, 1);
+    setSelectedFiles(newSelectedFiles);
+  }
+
   const onFileUpload = async () => {
+    // Iterate over each selected file
 
-    if (fileSelected && fileSelected?.name) {
-      // prepare UI
-      setUploading(true);
+    for (const file of selectedFiles) {
+      if (file) {
+        // prepare UI
+        setUploading(true);
 
-      // *** UPLOAD TO AZURE STORAGE ***
-      const image  = await uploadFileToBlob(fileSelected) || '';
-      // *** CREATE RECORD IN AIRTABLE ***
-      await createRecord(comment, image);
-      // reset state/form
-      setFileSelected(null);
-      setFileUploaded(fileSelected.name);
-      setUploading(false);
-      setInputKey(Math.random().toString(36));
-
+        // *** UPLOAD TO AZURE STORAGE ***
+        const image = await uploadFileToBlob(file) || '';
+        // *** CREATE RECORD IN AIRTABLE ***
+        await createRecord(comment, image);
+      }
     }
-
+    setSelectedFiles([]);
+    setFileUploaded(selectedFiles.map((file: any) => file?.name).join(', '));
+    setUploading(false);
+    setInputKey(Math.random().toString(36));
   };
 
 
   // display form
   const DisplayForm = () => (
-    <div>
-      <input type="file" onChange={onFileChange} key={inputKey || ''} />
+    <div className="file-upload-container">
+      <UploadImageForm onFileChange={onFileChange} selectedFiles={selectedFiles} removeImage={removeImage} />
+      <input type="file" onChange={onFileChange} key={inputKey || ''} multiple />
       <input type="text" value={comment} onChange={(event) => setComment(event.target.value)} />
-      <button type="submit" disabled={comment === '' || !fileSelected} onClick={onFileUpload}>
+      <button type="submit"
+        // disabled={comment === '' || !fileSelected} 
+        onClick={onFileUpload}>
         Upload!
       </button>
     </div>
   )
 
+  console.log(selectedFiles)
+
+
   return (
     <div>
-      <h1>Upload file to Azure Blob Storage</h1>
       {storageConfigured && !uploading && DisplayForm()}
       {storageConfigured && uploading && <div>Uploading</div>}
       <hr />
