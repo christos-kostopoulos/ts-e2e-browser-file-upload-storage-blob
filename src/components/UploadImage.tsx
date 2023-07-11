@@ -64,17 +64,19 @@ const UploadImage = (): JSX.Element => {
   const DisplayForm = () => (
     <div className="file-upload-container">
       <UploadImageForm onFileChange={onFileChange} selectedFiles={selectedFiles} removeImage={removeImage} />
-      <input type="file" onChange={onFileChange} key={inputKey || ''} multiple />
-      <input type="text" value={comment} onChange={(event) => setComment(event.target.value)} />
-      <button type="submit"
-        // disabled={comment === '' || !fileSelected} 
-        onClick={onFileUpload}>
-        Upload!
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
+        <input placeholder="Add a comment for uploaded files" className="secondary-input" type="text" value={comment} onChange={(event) => setComment(event.target.value)} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <button className="primary-button" style={{ width: '50%' }} type="submit" disabled={comment === '' || selectedFiles.length === 0}
+          onClick={onFileUpload}>
+          UPLOAD
+        </button>
+      </div>
     </div>
   )
 
-  console.log(selectedFiles)
+
 
 
   return (

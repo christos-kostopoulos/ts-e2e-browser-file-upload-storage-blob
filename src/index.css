@@ -60,6 +60,17 @@ label {
   background-color: #555;
 }
 
+.secondary-input {
+  padding: 12px;
+  border: 1px solid #1e80e8;
+  border-radius: 50px;
+  width: 90%;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #555;
+
+}
+
 .primary-button {
   padding: 10px;
   background-color: #5795d0;
@@ -92,17 +103,6 @@ p {
 }
 
 /* drag and drop ui  */
-
-/* .file-upload-contain .file-drop-zone {
-  border: 2px dashed #1e80e8;
-  transition: 0.3s;
-  margin: 0;
-  padding: 0;
-  border-radius: 20px;
-  background-color: #f1f8fe;
-  min-height: auto;
-  cursor: pointer;
-} */
 
 .file-input {
   position: initial;
@@ -143,7 +143,6 @@ p {
 }
 
 .file-upload-container {
-  width: 100%;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -271,4 +270,125 @@ p {
   border-radius: 4px;
   margin: 0px 4px;
   cursor: pointer;
+}
+
+
+/* header */
+
+
+header a {
+  text-decoration: none;
+}
+
+header {
+  padding: 0 20px;
+  background-color: #1d1f1d;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#brand {
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+}
+
+#brand a {
+  color: #5795d0;
+}
+
+ul {
+  margin:0;
+  list-style: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+ul a {
+  color: white;
+}
+
+ul li {
+  padding: 5px;
+  margin-left: 10px;
+}
+
+ul li:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+#login,
+#signup {
+  border-radius: 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+#login button {
+  border: 1px solid #498afb;
+}
+
+#signup {
+  border: 1px solid #ff3860;
+}
+
+#signup a {
+  color: #ff3860;
+}
+
+#login a {
+  color: #498afb;
+}
+
+#hamburger-icon {
+  margin: auto 0;
+  display: none;
+  cursor: pointer;
+}
+
+#hamburger-icon div {
+  width: 35px;
+  height: 3px;
+  background-color: white;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.open .bar1 {
+  -webkit-transform: rotate(-45deg) translate(-6px, 6px);
+  transform: rotate(-45deg) translate(-6px, 6px);
+}
+
+.open .bar2 {
+  opacity: 0;
+}
+
+.open .bar3 {
+  -webkit-transform: rotate(45deg) translate(-6px, -8px);
+  transform: rotate(45deg) translate(-6px, -8px);
+}
+
+.open .mobile-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  height: calc(100vh - 50px);
+  width: 100%;
+}
+
+.mobile-menu li {
+  margin-bottom: 10px;
 }

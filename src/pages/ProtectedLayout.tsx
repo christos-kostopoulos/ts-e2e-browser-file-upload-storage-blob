@@ -1,6 +1,7 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
+import NavBar from "../components/NavBar";
 
 
 export const ProtectedLayout = () => {
@@ -16,8 +17,8 @@ export const ProtectedLayout = () => {
 
   return (
     <div>
-        <h1>Protected Layout</h1>
-        <button onClick={logOut}>Sign out</button>
+      <NavBar />
+     
       {outlet}
     </div>
   );
