@@ -21,6 +21,8 @@ code {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .form-container {
@@ -142,6 +144,27 @@ p {
   color: #2580e8;
 }
 
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
 .file-upload-container {
   padding-right: 15px;
   padding-left: 15px;
@@ -264,12 +287,14 @@ p {
   border: none;
   background-color: #ef2f2f;
   color: #fff;
-  width: 25px;
-  height: 25px;
+  width: 100%;
+  height: 40px;
   font-size: 12px;
   border-radius: 4px;
   margin: 0px 4px;
   cursor: pointer;
+  display: flex; 
+  align-items: center;
 }
 
 
@@ -391,4 +416,37 @@ ul li:hover {
 
 .mobile-menu li {
   margin-bottom: 10px;
+}
+/* Spinner */
+
+
+.paytm-loader {
+  color: #002e6e;
+  width: 3px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
+  transform: translateX(-38px);
+  animation: loader 0.5s infinite alternate linear;
+  -webkit-box-shadow: 19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0;
+  -webkit-transform: translateX(-38px);
+  -webkit-animation: loader 0.5s infinite alternate linear;
+}
+
+@keyframes loader {
+  50% {
+    box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px;
+  }
+  100% {
+    box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
+  }
+}
+
+@-webkit-keyframes loader {
+  50% {
+    box-shadow: 19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px;
+  }
+  100% {
+    box-shadow: 19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px;
+  }
 }

@@ -1,8 +1,6 @@
 // Login form with email and password
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { auth } from '../firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import useSignInWithEmailAndPassword from "../hooks/useSignInWithEmailAndPassword";
 import logo from '../assets/seaquestLogo.png';
 const Login = () => {
@@ -37,8 +35,6 @@ const Login = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-
-
                         <label>Password:</label>
                         <input
                             type="password"
@@ -47,7 +43,6 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-
                         <button className="primary-button" type="submit">Login</button>
                         {error && <p style={{ color: 'red' }}>{error.message}</p>}
                     </form>}

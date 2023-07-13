@@ -31,24 +31,28 @@ const UploadImageForm = ({ onFileChange, selectedFiles, removeImage }: any) => {
                     </div>
                 </div>
             </div>
-            {selectedFiles.length > 0 && selectedFiles.map((file: any, index: number) => {
-                return <div className="file-preview-thumbnails">
-                    <div className="file-preview-frame file-sortable kv-preview-thumb" id="thumb-multiplefileupload-36479_scrubber5.jpeg" data-fileindex="-1" data-fileid="36479_scrubber5.jpeg" data-template="image" data-zoom="" draggable="false">
-                        <div className="kv-file-content">
-                            <img src={URL.createObjectURL(file)} className="file-preview-image kv-preview-data" title="scrubber5.jpeg" alt="scrubber5.jpeg" style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "100%", imageOrientation: "from-image" }} draggable="false" />
-                        </div>
-                        <div className="file-thumbnail-footer">
-                            <div className="file-detail"><div className="file-caption-name">{file?.name}</div>
-                                <div className="file-size"> <samp>(35.62 KB)</samp></div>
-                            </div>   <div className="file-actions">
-                                <div className="file-footer-buttons">
-                                    <button onClick={() => removeImage(index)} type="button" className="kv-file-remove file-remove" title="Remove file"><img src={close} style={{ width: '14px' }} /></button>
+            <div className="container">
+                {selectedFiles.length > 0 && selectedFiles.map((file: any, index: number) => {
+                    return <div className="file-preview-thumbnails">
+                        <div className="file-preview-frame file-sortable kv-preview-thumb" id="thumb-multiplefileupload-36479_scrubber5.jpeg" data-fileindex="-1" data-fileid="36479_scrubber5.jpeg" data-template="image" data-zoom="" draggable="false">
+                            <div className="kv-file-content">
+                                <img src={URL.createObjectURL(file)} className="file-preview-image kv-preview-data" title="scrubber5.jpeg" alt="scrubber5.jpeg" style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "100%", imageOrientation: "from-image" }} draggable="false" />
+                            </div>
+                            <div className="file-thumbnail-footer">
+                                <div className="file-detail"><div className="file-caption-name">{file?.name}</div>
+                                    <div className="file-size"> <samp>(35.62 KB)</samp></div>
+                                </div>
+                                <div className="file-actions">
+                                    <div className="file-footer-buttons">
+                                        <button onClick={() => removeImage(index)} type="button" className="kv-file-remove file-remove" title="Remove file"><img src={close} style={{ width: '14px' }} /></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            })}
+
+                })}
+            </div>
         </div>
     )
 }

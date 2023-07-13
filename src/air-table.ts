@@ -5,14 +5,17 @@ const airtableUrl = `https://api.airtable.com/v0/${baseId}/${tableId}`;
 //  api post request in airtableUrl to create a new record in the table with the data from the form 
 
 
-const createRecord = async (comment: string, imageUrl: string) => {
+const createRecord = async (comment: string, imageUrl: string, user_id: string) => {
 
     const data = {
         "records": [
             {
                 "fields": {
                     "comment": comment,
-                    "image": imageUrl.substring(0, imageUrl.lastIndexOf('?'))
+                    "image": imageUrl.substring(0, imageUrl.lastIndexOf('?')),
+                    "user_id": user_id,
+                    "vessel": 7,
+                    "project": 1
                 }
             }
         ]
@@ -24,8 +27,12 @@ const createRecord = async (comment: string, imageUrl: string) => {
     });
     return response.json();
 
-
 };
 
-
-export default createRecord;
+const getRecordsByUserId = async (user_id: string) => {
+    const response = await fetch(`${airtableUrl}?filterByFormula=user_id="${user_id}"`, {
+        headers: { Authorization: `Bearer ${airTableToken}` }
+    });
+    return response.json();
+};
+export { createRecord, getRecordsByUserId };

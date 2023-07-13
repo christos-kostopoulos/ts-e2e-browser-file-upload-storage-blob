@@ -3,12 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import uploadFileToBlob, { isStorageConfigured, getBlobsInContainer } from '../azure-storage-blob';
 import DisplayImagesFromContainer from '../ContainerImages';
-import createRecord from '../air-table';
+import {createRecord} from '../air-table';
+import useAuthState from "../hooks/useAuth";
+import { auth } from "../firebase";
 import UploadImageForm from './UploadImageForm';
+import Loader from './Loader';
 
 const storageConfigured = isStorageConfigured();
 
 const UploadImage = (): JSX.Element => {
+
+  // user 
+  const [user] = useAuthState(auth);
+  console.log('user', user?.uid)
   // all blobs in container
   const [blobList, setBlobList] = useState<string[]>([]);
 
@@ -50,7 +57,7 @@ const UploadImage = (): JSX.Element => {
         // *** UPLOAD TO AZURE STORAGE ***
         const image = await uploadFileToBlob(file) || '';
         // *** CREATE RECORD IN AIRTABLE ***
-        await createRecord(comment, image);
+        await createRecord(comment, image, user?.uid || '');
       }
     }
     setSelectedFiles([]);
@@ -82,7 +89,7 @@ const UploadImage = (): JSX.Element => {
   return (
     <div>
       {storageConfigured && !uploading && DisplayForm()}
-      {storageConfigured && uploading && <div>Uploading</div>}
+      {storageConfigured && uploading && <Loader />}
       <hr />
       {storageConfigured && blobList.length > 0 && <DisplayImagesFromContainer blobList={blobList} />}
       {!storageConfigured && <div>Storage is not configured.</div>}
