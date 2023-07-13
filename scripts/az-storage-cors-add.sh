@@ -10,3 +10,11 @@ az storage cors add --methods DELETE GET HEAD MERGE OPTIONS POST PUT \
     --account-name YOUR-RESOURCE-NAME \
     --subscription YOUR-SUBSCRIPTION-ID \
     --sas-token "YOUR-SAS-TOKEN"
+
+    az storage container generate-sas \
+    --account-name seaquestservices \
+    --name uploaded \
+    --permissions acdlrw \
+    --expiry '2023-12-30T07:28:38Z' \
+    --auth-mode login \
+    --as-user
